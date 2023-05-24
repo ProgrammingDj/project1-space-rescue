@@ -128,8 +128,7 @@ body {
         font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
         font-size: 30px;
         color: #4d014f;
-    
-    }
+}
 
 .astronautHud {
     height: 50px;
@@ -138,6 +137,14 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+}
+
+#astronautValue {
+    height: 40px;
+    width: 100px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 30px;
+    color: #4d014f;
 }
 
 .gasHud {
@@ -151,11 +158,10 @@ body {
 
 #gasValue {
     height: 40px;
-    width: 300px;
+    width: 100px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: 30px;
+    font-size: 22px;
     color: #4d014f;
-
 }
 
 .background {

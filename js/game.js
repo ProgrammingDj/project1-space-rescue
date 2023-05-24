@@ -2,6 +2,7 @@ class Game {
     constructor(){
         this.player = null;
         this.obstaclesArr = []; // will store instances of the class Obstacle
+        this.astronautCollisionsArr = [];
     }
 
     start(){
@@ -50,10 +51,12 @@ class Game {
                 obstacleInstance.moveDown();
 
                 // Detect collision
-                this.detectCollision(obstacleInstance);
+                //this.detectCollision(obstacleInstance);
 
                 // Detect if obstacle needs to be removed
                 this.removeObstacleIfOutside(obstacleInstance, index);
+                this.removeObstacleIfAstronautCollision(obstacleInstance, index);
+                this.countAstronautCollisions(this.obstaclesArr, index);
 
             });
         }, 60);
@@ -79,7 +82,7 @@ class Game {
         })
     }
 
-    detectCollision(obstacleInstance){
+    /*detectCollision(obstacleInstance){
         if (obstacleInstance.positionX < this.player.positionX + this.player.width &&
             obstacleInstance.positionX + obstacleInstance.width > this.player.positionX &&
             obstacleInstance.positionY < this.player.positionY + this.player.height &&
@@ -88,7 +91,18 @@ class Game {
         //    this.stopObstacle();
         //    this.removeObstacleIfOutside();
         }
-    }
+    }*/
+
+    detectCollision(obstacleInstance){
+      if (this.player.positionX < (obstacleInstance.positionX + obstacleInstance.width) && 
+      (this.player.positionX + this.player.width) > obstacleInstance.positionX&& 
+      this.player.positionY < (obstacleInstance.positionY + obstacleInstance.width) && 
+      (this.player.positionY + this.player.width) > obstacleInstance.positionY) {
+              console.log("Rocket Hit")
+      //    this.stopObstacle();
+      //    this.removeObstacleIfOutside();
+      }
+  }
 
 
 
@@ -104,6 +118,53 @@ class Game {
         }
 
     }
+
+    removeObstacleIfAstronautCollision(obstacleInstance, index) {
+      if (
+        (this.player.positionX < (obstacleInstance.positionX + obstacleInstance.width) && 
+      (this.player.positionX + this.player.width) > obstacleInstance.positionX&& 
+      this.player.positionY < (obstacleInstance.positionY + obstacleInstance.width) && 
+      (this.player.positionY + this.player.width) > obstacleInstance.positionY)
+      ) {
+        const collidedObstacle = this.obstaclesArr[index];
+        if (collidedObstacle instanceof Astronaut) {
+
+          // 1. Remove element from the DOM
+          collidedObstacle.domElement.remove();
+    
+          // 2. Remove from the array of obstacles
+          this.obstaclesArr.splice(index, 1);
+          console.log("Astronaut removed from Dom and Array");
+        }
+      }
+    }
+
+    countAstronautCollisions() {
+      this.astronautCollisions = 0;
+    
+      this.obstaclesArr.forEach((obstacleInstance) => {
+        if (
+          (this.player.positionX < (obstacleInstance.positionX + obstacleInstance.width) && 
+          (this.player.positionX + this.player.width) > obstacleInstance.positionX&& 
+          this.player.positionY < (obstacleInstance.positionY + obstacleInstance.width) && 
+          (this.player.positionY + this.player.width) > obstacleInstance.positionY) &&
+          obstacleInstance instanceof Astronaut
+        ) {
+          this.astronautCollisions++;
+        }
+      });
+    
+      // Store the counted astronaut collisions in the array
+      this.astronautCollisionsArr.push(this.astronautCollisions);
+    
+      const astronautValueElement = document.getElementById("astronautValue");
+      // Display the last counted number from the array
+      astronautValueElement.textContent = this.astronautCollisionsArr[this.astronautCollisionsArr.length - 1].toString();
+    }
+    
+    
+    
+    
 
     
 
@@ -154,7 +215,7 @@ class Player {
     }
 
     moveLeft(){
-        if (this.positionX > 1) 
+        if (this.positionX > 2) 
         console.log(this)
         this.positionX -= 2; //modify the position
         this.domElement.style.left = this.positionX + "vw"; //reflect change in the css
@@ -168,17 +229,17 @@ class Player {
     }
 
     moveUp(){
-        if (this.positionY < 29) 
+        if (this.positionY < 28) 
         console.log(this)
         this.positionY += 2; //modify the position
-        this.domElement.style.bottom = this.positionY + "vw"; //reflect change in the css
+        this.domElement.style.bottom = this.positionY + "vh"; //reflect change in the css
         
     }
     moveDown(){
-        if (this.positionY >= 1) 
+        if (this.positionY >= 4) 
         console.log(this)
         this.positionY -= 2; //modify the position
-        this.domElement.style.bottom = this.positionY + "vw"; //reflect change in the css
+        this.domElement.style.bottom = this.positionY + "vh"; //reflect change in the css
     }
 }
 
@@ -214,10 +275,8 @@ class ObstacleDown {
 
   
   class Ufo extends ObstacleDown {
-    constructor(width, height, className, speed) {
+    constructor(className, speed) {
       super();
-      this.width = 400;
-      this.height = 375;
       this.positionX = Math.floor(Math.random() * 101);
       this.positionY = 100;
       this.domElement.className = "ufo";
@@ -226,10 +285,8 @@ class ObstacleDown {
   }
 
   class Nebula extends ObstacleDown {
-    constructor(width, height, className, speed) {
+    constructor(className, speed) {
       super();
-      this.width = 100;
-      this.height = 200;
       this.positionX = Math.floor(Math.random() * 101);
       this.positionY = 100;
       this.domElement.className = "nebula";
@@ -238,10 +295,8 @@ class ObstacleDown {
   }
 
   class Meteor extends ObstacleDown {
-    constructor(width, height, className, speed) {
+    constructor(className, speed) {
       super();
-      this.width = 100;
-      this.height = 200;
       this.positionX = Math.floor(Math.random() * 101);
       this.positionY = 100;
       this.domElement.className = "meteor";
@@ -250,10 +305,8 @@ class ObstacleDown {
   }
 
   class Gas extends ObstacleDown {
-    constructor(width, height, className, speed) {
+    constructor(className, speed) {
       super();
-      this.width = 100;
-      this.height = 200;
       this.positionX = Math.floor(Math.random() * 101);
       this.positionY = 100;
       this.domElement.className = "gas";
@@ -263,14 +316,12 @@ class ObstacleDown {
 
 
   class Astronaut extends ObstacleDown {
-    constructor(width, height, className, speed) {
+    constructor(className, speed) {
       super();
-      this.width = 200;
-      this.height = 200;
       this.positionX = Math.floor(Math.random() * 101);
       this.positionY = 100;
       this.domElement.className = "astronaut";
-      this.speed = 1;
+      this.speed = 0.25;
     }
   }
 
