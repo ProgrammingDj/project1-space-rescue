@@ -1,0 +1,188 @@
+body {
+    margin: 0;
+    padding: 100px;
+    background-color: #4d014f;;
+    overflow: hidden;
+}
+
+#game-area {
+    position: relative;
+    margin: auto;
+    height: 600px;
+    width: 1125px;
+    background-color: black;
+    border: 2px solid black;
+    overflow: hidden;
+
+}
+
+#play-area {
+    display: flex;
+    flex-direction: column;
+    position: bottom;
+    margin: auto;
+    height: 550px;
+    width: 1125px;
+    background-color: black;
+    border: 2px solid black;
+    overflow: hidden;
+    background-image: url("../images/universebackground.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+#hud-area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 50px;
+    width: 1125px;
+    border: 2px solid black;
+    overflow: hidden;
+    background-color: black;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.astronaut{
+    position: absolute;
+    background-image: url("../images/astronaut.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    
+}
+
+.nebula{
+    position: absolute;
+    background-image: url("../images/nebula.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    
+}
+
+.meteor {
+    position: absolute;
+    background-image: url("../images/meteor.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.gas {
+    position: absolute;
+    background-image: url("../images/gas.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.satellite {
+    position: absolute;
+    background-image: url("../images/satellite.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+
+.ufo {
+    position: absolute;
+    background-image: url("../images/ufo.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.rocket {
+    position: absolute;
+    background-image: url("../images/rocket_up.png");
+    background-repeat: no no-repeat;
+    background-position: center center;
+    background-size: cover;
+    animation: rocketAnimate 0.2s infinite;
+}
+
+.rocketImg {
+    height: 150px;
+    width: 75px;
+    animation: rocketAnimate 0.2s infinite;
+}
+
+.pointsHud {
+    height: 40px;
+    width: 100px;
+    background-image: url("../images/points.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+#pointsValue {
+        height: 40px;
+        width: 80px;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        font-size: 30px;
+        color: #4d014f;
+    
+    }
+
+.astronautHud {
+    height: 50px;
+    width: 50px;
+    background-image: url("../images/astronaut.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.gasHud {
+    height: 50px;
+    width: 50px;
+    background-image: url("../images/gas.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+#gasValue {
+    height: 40px;
+    width: 300px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 30px;
+    color: #4d014f;
+
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    overflow: hidden;
+}
+
+
+
+@keyframes rocketAnimate {
+    0% {
+        transform: translateY(-2px);
+    }
+    50% {
+        transform: translateY(2px);
+    }
+    100% {
+        transform: translateY(-2px);
+    }
+}
+
+
+
+
+
