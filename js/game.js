@@ -2,7 +2,7 @@
 class Game {
   constructor() {
     this.player = null;
-    this.astronautArr = []; // will store instances of the class Obstacle
+    this.astronautArr = [];
     this.ufoArr = [];
     this.satelliteArr = [];
     this.meteorArr = [];
@@ -13,8 +13,6 @@ class Game {
     this.timePoints = 0;
     this.astronautPoints = 0;
     this.totalPoints = 0;
-
-    // simple points mechanism
     this.points = 0;
   }
 
@@ -64,7 +62,7 @@ class Game {
 
     // Astronauts
     setInterval(() => {
-      this.astronautArr.forEach((astronaut, index) => {
+        this.astronautArr.forEach((astronaut, index) => {
         // Move current obstacle
         astronaut.moveDown();
 
@@ -79,7 +77,7 @@ class Game {
 
     // Ufos
     setInterval(() => {
-      this.ufoArr.forEach((ufo, index) => {
+        this.ufoArr.forEach((ufo, index) => {
         // Move current obstacle
         ufo.moveDown();
 
@@ -93,7 +91,7 @@ class Game {
 
     // Gas
     setInterval(() => {
-      this.gasArr.forEach((gas, index) => {
+        this.gasArr.forEach((gas, index) => {
         // Move current obstacle
         gas.moveDown();
 
@@ -107,7 +105,7 @@ class Game {
 
     // Meteor
     setInterval(() => {
-      this.meteorArr.forEach((meteor, index) => {
+        this.meteorArr.forEach((meteor, index) => {
         // Move current obstacle
         meteor.moveDown();
 
@@ -121,7 +119,7 @@ class Game {
 
     // Nebula
     setInterval(() => {
-      this.nebulaArr.forEach((nebula, index) => {
+        this.nebulaArr.forEach((nebula, index) => {
         // Move current obstacle
         nebula.moveDown();
 
@@ -446,33 +444,9 @@ class Player {
 
 }
 
-class ObstacleDown {
+class Ufo {
   constructor() {
-    this.speed = "";
-    this.width = 4;
-    this.height = 6;
-    this.positionX = 50; /* Math.floor(Math.random() * 100) */ // random number between 0 and 100-this.width;
-    this.positionY = 50;
-    this.domElement = null;
-    this.createDomElement();
-  }
-
-  createDomElement() {
-    this.domElement = document.createElement("div");
-    this.domElement.className = "";
-    this.domElement.style.width = this.width + "vw";
-    this.domElement.style.height = this.height + "vh";
-    this.domElement.style.left = this.positionX + "vw";
-    this.domElement.style.bottom = this.positionY + "vh";
-
-    const parentElm = document.getElementById("play-area");
-    parentElm.appendChild(this.domElement);
-  }
-}
-
-class Ufo /* extends ObstacleDown */ {
-  constructor(/* width, height, className, speed */) {
-    /*    super(); */
+    
     this.width = 4;
     this.height = 6;
     this.positionX = Math.floor(Math.random() * 100);
