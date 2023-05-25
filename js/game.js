@@ -1,16 +1,23 @@
+
 class Game {
   constructor() {
     this.player = null;
-    this.obstaclesArr = []; // will store instances of the class Obstacle
+    this.astronautArr = []; // will store instances of the class Obstacle
     this.ufoArr = [];
+    this.satelliteArr = [];
+    this.meteorArr = [];
+    this.nebulaArr = [];
     this.gasArr = [];
     this.gasProcent = 0;
     this.astronautValue = 0;
+    this.timePoints = 0;
+    this.astronautPoints = 0;
     this.totalPoints = 0;
 
     // simple points mechanism
     this.points = 0;
   }
+
 
   start() {
     this.player = new Player();
@@ -20,50 +27,55 @@ class Game {
     // Create new obstacles Gas
     setInterval(() => {
       const astronaut = new Astronaut();
-      this.obstaclesArr.push(astronaut);
+      this.astronautArr.push(astronaut);
+      this.updateTimePoints();
     }, 1000);
 
     // Create new obstacles NEBULA
-    /*     setInterval(() => {
+    setInterval(() => {
       const nebula = new Nebula();
-      this.obstaclesArr.push(nebula);
-    }, 3000); */
+      this.nebulaArr.push(nebula);
+    }, 1000);
 
     // Create new obstacles UFO
     setInterval(() => {
       const ufo = new Ufo();
       this.ufoArr.push(ufo);
-    }, 1000);
+    }, 3000);
 
     // Create new obstacles Meteor
-    /*     setInterval(() => {
+    setInterval(() => {
       const meteor = new Meteor();
-      this.obstaclesArr.push(meteor);
+      this.meteorArr.push(meteor);
     }, 10000);
- */
+ 
     // Create new obstacles Gas
     setInterval(() => {
       const gas = new Gas();
       this.gasArr.push(gas);
-    }, 3000);
+    }, 7000);
+
+    // Create new obstacles Satellite
+    setInterval(() => {
+      const satellite = new Satellite();
+      this.satelliteArr.push(satellite);
+    }, 15000);
+  
 
     // Astronauts
     setInterval(() => {
-      this.obstaclesArr.forEach((astronaut, index) => {
+      this.astronautArr.forEach((astronaut, index) => {
         // Move current obstacle
         astronaut.moveDown();
 
         // Detect collision
-        this.detectAstroCollision(astronaut, index);
+        this.detectAstronautCollision(astronaut, index);
 
         // Detect if obstacle needs to be removed
-        // this.removeObstacleIfOutside(obstacleInstance, index);
+        this.removeAstronautIfOutside(astronaut, index);
       });
     }, 60);
 
-    setInterval(() => {
-      console.log(this.obstaclesArr);
-    }, 5000);
 
     // Ufos
     setInterval(() => {
@@ -75,7 +87,7 @@ class Game {
         this.detectUfoCollision(ufo, index);
 
         // Detect if obstacle needs to be removed
-        // this.removeObstacleIfOutside(obstacleInstance, index);
+        this.removeUfoIfOutside(ufo, index);
       });
     }, 60);
 
@@ -87,9 +99,51 @@ class Game {
 
         // Detect collision
         this.detectGasCollision(gas, index);
+        
+        // Detect if obstacle needs to be removed
+        this.removeGasIfOutside(gas, index);
+      });
+    }, 60);
+
+    // Meteor
+    setInterval(() => {
+      this.meteorArr.forEach((meteor, index) => {
+        // Move current obstacle
+        meteor.moveDown();
+
+        // Detect collision
+        this.detectMeteorCollision(meteor, index);
 
         // Detect if obstacle needs to be removed
-        // this.removeObstacleIfOutside(obstacleInstance, index);
+        this.removeMeteorIfOutside(meteor, index);
+      });
+    }, 60);
+
+    // Nebula
+    setInterval(() => {
+      this.nebulaArr.forEach((nebula, index) => {
+        // Move current obstacle
+        nebula.moveDown();
+
+        // Detect collision
+        this.detectNebulaCollision(nebula, index);
+
+        // Detect if obstacle needs to be removed
+        this.removeNebulaIfOutside(nebula, index);
+      });
+    }, 60);
+
+    // Satellite
+    setInterval(() => {
+      this.satelliteArr.forEach((satellite, index) => {
+        // Move current obstacle
+        satellite.moveLeft();
+
+        // Detect collision
+        this.detectSatelliteCollision(satellite, index);
+
+        // Detect if obstacle needs to be removed
+        this.removeSatelliteIfOutside(satellite, index);
       });
     }, 60);
   }
@@ -104,11 +158,11 @@ class Game {
         this.player.moveUp();
       } else if (event.code === "ArrowDown") {
         this.player.moveDown();
-      }
+      } 
     });
   }
 
-  detectAstroCollision(astronaut, index) {
+  detectAstronautCollision(astronaut, index) {
     
     if (
       astronaut.positionX < this.player.positionX + this.player.width &&
@@ -116,14 +170,15 @@ class Game {
       astronaut.positionY < this.player.positionY + this.player.height &&
       astronaut.height + astronaut.positionY > this.player.positionY
     ) {
-      console.log("Rocket Hit");
+      console.log("Astronaut collected, yeah");
 
       astronaut.domElement.remove();
 
-      this.obstaclesArr.splice(index, 1); //remove from the array
+      this.astronautArr.splice(index, 1); //remove from the array
 
-      this.updatePoints(10000);
-      this.updateAstronautValue(1)
+      this.updateAstronautPoints();
+      document.getElementById("pointsValue").textContent = this.totalPoints.toFixed(0);
+      this.updateAstronautValue(1);
       document.getElementById("astronautValue").textContent = this.astronautValue.toFixed(0);
     }
   }
@@ -137,11 +192,66 @@ class Game {
     ) {
       console.log("Ufo Hit");
 
-      // ufo.domElement.remove();
+      ufo.domElement.remove();
+      this.ufoArr.splice(index, 1); //remove from the array
 
-      //location.href = "./gameover.html";
+      location.href = "./gameover.html";
 
-      // this.obstaclesArr.splice(index, 1); //remove from the array
+      
+    }
+  }
+
+  detectMeteorCollision(meteor, index) {
+    if (
+      meteor.positionX < this.player.positionX + this.player.width &&
+      meteor.positionX + meteor.width > this.player.positionX &&
+      meteor.positionY < this.player.positionY + this.player.height &&
+      meteor.height + meteor.positionY > this.player.positionY
+    ) {
+      console.log("Meteor Hit");
+
+      meteor.domElement.remove();
+      this.meteorArr.splice(index, 1); //remove from the array
+
+      location.href = "./gameover.html";
+
+      
+    }
+  }
+
+  detectNebulaCollision(nebula, index) {
+    if (
+      nebula.positionX < this.player.positionX + this.player.width &&
+      nebula.positionX + nebula.width > this.player.positionX &&
+      nebula.positionY < this.player.positionY + this.player.height &&
+      nebula.height + nebula.positionY > this.player.positionY
+    ) {
+      console.log("Nebula Hit");
+
+      nebula.domElement.remove();
+      this.nebulaArr.splice(index, 1); //remove from the array
+
+      location.href = "./gameover.html";
+
+      
+    }
+  }
+
+  detectSatelliteCollision(satellite, index) {
+    if (
+      satellite.positionX < this.player.positionX + this.player.width &&
+      satellite.positionX + satellite.width > this.player.positionX &&
+      satellite.positionY < this.player.positionY + this.player.height &&
+      satellite.height + satellite.positionY > this.player.positionY
+    ) {
+      console.log("Satellite Hit");
+
+      satellite.domElement.remove();
+      this.satelliteArr.splice(index, 1); //remove from the array
+
+      location.href = "./gameover.html";
+
+      
     }
   }
 
@@ -155,70 +265,129 @@ class Game {
       console.log("Gas Collected - WooHoo!");
 
       gas.domElement.remove();
-
+      this.gasProcent += 30;
+      document.getElementById("gasValue").textContent = this.gasProcent.toFixed(0) + "L";
+      this.updateGasPoints();
       this.gasArr.splice(index, 1); //remove from the array
-
-      this.updateGas(50000);
-    }
-  }
-
-  removeObstacleIfOutside(obstacleInstance, index) {
-    if (obstacleInstance.positionY < 0) {
-      // 1. Remove element from the DOM
-      obstacleInstance.domElement.remove();
-
-      // 2. Remove from the array of obstacles
-      this.obstaclesArr.splice(index, 1);
-      console.log("Obstacle removed");
-    }
-  }
-
-  /*    stopObstacle() {
-        clearInterval(this.obstacleInterval);
-        this.stopObstacleMoving();
-    }
     
-
-    stopObstacleMoving() {
-        this.obstacleInstance.moveDown = false;
+      
+      return true;
     }
-  */
-  pointsDisplay(totalPoints) {
-    this.totalPoints = this.updatePoints(points) + this.updateGas(gasProcent);
-
-    document.getElementById("pointsValue").textContent = this.totalpoints.toFixed(0);
   }
 
-  updatePoints(points) {
-    this.points += points;
-    return console.log(this.points);
+  removeAstronautIfOutside(astronautInstance, index) {
+    if (astronautInstance.positionY < 0) {
+      // 1. Remove element from the DOM
+      astronautInstance.domElement.remove();
+
+      // 2. Remove from the array of astronaut
+      this.astronautArr.splice(index, 1);
+      console.log("Astronaut removed outside");
+    }
   }
 
-  updateAstronautValue(astronautValue) {
-  this.astronautValue += astronautValue;
-  return console.log(this.astronautValue);
+  removeGasIfOutside(gasInstance, index) {
+    if (gasInstance.positionY < 0) {
+      // 1. Remove element from the DOM
+     gasInstance.domElement.remove();
+
+      // 2. Remove from the array of gas
+      this.gasArr.splice(index, 1);
+      console.log("Gas removed outside");
+    }
   }
 
-  gasValue() {
-    let seconds = Math.floor(1000 * 60) / 1000;
-    let gasProcent = Math.round(100 / 60) * seconds;
+  removeUfoIfOutside(ufoInstance, index) {
+    if (ufoInstance.positionY < 0) {
+      // 1. Remove element from the DOM
+      ufoInstance.domElement.remove();
 
-    setInterval(() => {
-      gasProcent -= 100 / seconds;
-      if (gasProcent < 0) {
-        gasProcent = 0;
+      // 2. Remove from the array of ufo
+      this.ufoArr.splice(index, 1);
+      console.log("Ufo removed outside");
+    }
+  }
+
+  removeMeteorIfOutside(meteorInstance, index) {
+    if (meteorInstance.positionY < 0) {
+      // 1. Remove element from the DOM
+      meteorInstance.domElement.remove();
+
+      // 2. Remove from the array of meteor
+      this.meteorArr.splice(index, 1);
+      console.log("Meteor removed outside");
+    }
+  }
+
+  removeNebulaIfOutside(nebulaInstance, index) {
+    if (nebulaInstance.positionY < 0) {
+      // 1. Remove element from the DOM
+      nebulaInstance.domElement.remove();
+
+      // 2. Remove from the array of nebula
+      this.nebulaArr.splice(index, 1);
+      console.log("Nebula removed outside");
+    }
+  }
+
+  removeSatelliteIfOutside(satelliteInstance, index) {
+    if (satelliteInstance.positionX < 0) {
+      // 1. Remove element from the DOM
+      satelliteInstance.domElement.remove();
+
+      // 2. Remove from the array of nebula
+      this.satelliteArr.splice(index, 1);
+      console.log("Satellite removed outside");
+    }
+  }
+    updateTimePoints(){
+        this.totalPoints += 1000; 
+        document.getElementById("pointsValue").textContent =
+        Math.round(this.totalPoints).toFixed();
       }
-      document.getElementById("gasValue").textContent =
-        gasProcent.toFixed(0) + "K Liters";
-    }, 1000);
-  }
 
-  updateGas(gasValue) {
-    this.gasProcent += Math.round(gasValue + gasValue / 3);
-    document.getElementById("gasValue").textContent = this.gasProcent.toFixed(0);
-    return console.log(this.gasProcent);
+    updateGasPoints() {
+      this.totalPoints += 50000;
+      document.getElementById("pointsValue").textContent =
+      Math.round(this.totalPoints).toFixed();
+      return this.totalPoints;
+    }
+
+    pointsDisplay() {
+      this.totalPoints += this.updateAstronautPoints(astronautValue) + this.updateGasPoints() + this.timePoints();
+      document.getElementById("pointsValue").textContent = this.thisPoints.toFixed(0);
+      return this.totalPoints;
+    }
+
+    updateAstronautPoints(points) {
+      this.totalPoints += 10000;
+      return this.totalPoints;
+    }
+
+    updateAstronautValue(astronautValue) {
+      this.astronautValue += astronautValue;
+      return this.astronautValue;
+    }
+
+    gasValue() {
+      let seconds = Math.floor(1000 * 60) / 1000;
+      this.gasProcent = (Math.round(100 / 60) * seconds) / 1.2;
+      
+    
+      setInterval(() => {
+        this.gasProcent -= 100 / seconds;
+        if (this.gasProcent > 0) {
+          this.gasProcent++;
+        } else {
+          location.href = "./gameover.html";
+        }
+        document.getElementById("gasValue").textContent =
+          Math.round(this.gasProcent).toFixed() + "L";
+      }, 1000);
+    }
+
+
   }
-}
 
 class Player {
   constructor() {
@@ -249,26 +418,32 @@ class Player {
   }
 
   moveLeft() {
-    if (this.positionX > 1) console.log(this);
-    this.positionX -= 2; //modify the position
-    this.domElement.style.left = this.positionX + "vw"; //reflect change in the css
+    console.log(this);
+    if (this.positionX > 2) 
+    {this.positionX -= 2;} //modify the position
+    this.domElement.style.left = this.positionX + "vw"; 
   }
   moveRight() {
-    if (this.positionX < 74) console.log(this);
-    this.positionX += 2; //modify the position
-    this.domElement.style.left = this.positionX + "vw"; //reflect change in the css
+    console.log(this);
+    if (this.positionX + this.width < 77) 
+    {this.positionX += 2;} //modify the position
+    this.domElement.style.left = this.positionX + "vw"; 
   }
 
   moveUp() {
-    if (this.positionY < 29) console.log(this);
-    this.positionY += 2; //modify the position
-    this.domElement.style.bottom = this.positionY + "vw"; //reflect change in the css
+    console.log(this)
+    if (this.positionY + this.height < 65)
+    {this.positionY += 2;} //modify the position
+    this.domElement.style.bottom = this.positionY + "vh"; 
   }
   moveDown() {
-    if (this.positionY >= 1) console.log(this);
-    this.positionY -= 2; //modify the position
-    this.domElement.style.bottom = this.positionY + "vw"; //reflect change in the css
+    console.log(this);
+    if (this.positionY >= 1) 
+    {this.positionY -= 2;} //modify the position
+    this.domElement.style.bottom = this.positionY + "vh"; 
   }
+
+
 }
 
 class ObstacleDown {
@@ -301,7 +476,7 @@ class Ufo /* extends ObstacleDown */ {
     this.width = 4;
     this.height = 6;
     this.positionX = Math.floor(Math.random() * 100);
-    this.positionY = 85;
+    this.positionY = 60;
     this.domElement = null;
     this.speed = 0.5;
 
@@ -326,23 +501,96 @@ class Ufo /* extends ObstacleDown */ {
   }
 }
 
-class Nebula extends ObstacleDown {
-  constructor(width, height, className, speed) {
-    super();
-    this.positionX = Math.floor(Math.random() * 101);
-    this.positionY = 100;
+class Nebula /* extends ObstacleDown */ {
+  constructor(/* width, height, className, speed */) {
+    /*    super(); */
+    this.width = 4;
+    this.height = 6;
+    this.positionX = Math.floor(Math.random() * 100);
+    this.positionY = 60;
+    this.domElement = null;
+    this.speed = 0.5;
+
+    this.createUfoDomElement();
+  }
+
+  createUfoDomElement() {
+    this.domElement = document.createElement("div");
     this.domElement.className = "nebula";
-    this.speed = 2;
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.bottom = this.positionY + "vh";
+
+    const parentElm = document.getElementById("play-area");
+    parentElm.appendChild(this.domElement);
+  }
+
+  moveDown() {
+    this.positionY -= this.speed;
+    this.domElement.style.bottom = this.positionY + "vh";
   }
 }
 
-class Meteor extends ObstacleDown {
-  constructor(width, height, className, speed) {
-    super();
-    this.positionX = Math.floor(Math.random() * 101);
-    this.positionY = 100;
-    this.domElement.className = "meteor";
+class Meteor /* extends ObstacleDown */ {
+  constructor(/* width, height, className, speed */) {
+    /*    super(); */
+    this.width = 4;
+    this.height = 6;
+    this.positionX = Math.floor(Math.random() * 100);
+    this.positionY = 60;
+    this.domElement = null;
     this.speed = 2;
+
+    this.createMeteorDomElement();
+  }
+
+  createMeteorDomElement() {
+    this.domElement = document.createElement("div");
+    this.domElement.className = "meteor";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.bottom = this.positionY + "vh";
+
+    const parentElm = document.getElementById("play-area");
+    parentElm.appendChild(this.domElement);
+  }
+
+  moveDown() {
+    this.positionY -= this.speed;
+    this.domElement.style.bottom = this.positionY + "vh";
+  }
+}
+
+class Satellite /* extends ObstacleDown */ {
+  constructor(/* width, height, className, speed */) {
+    /*    super(); */
+    this.width = 4;
+    this.height = 6;
+    this.positionX = 70;
+    this.positionY = Math.floor(Math.random() * 60);
+    this.domElement = null;
+    this.speed = 1;
+
+    this.createSatelliteDomElement();
+  }
+
+  createSatelliteDomElement() {
+    this.domElement = document.createElement("div");
+    this.domElement.className = "satellite";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.bottom = this.positionY + "vh";
+
+    const parentElm = document.getElementById("play-area");
+    parentElm.appendChild(this.domElement);
+  }
+
+  moveLeft() {
+    this.positionX -= this.speed;
+    this.domElement.style.left = this.positionX + "vw";
   }
 }
 
@@ -382,16 +630,15 @@ class Astronaut /* extends ObstaclceDown */ {
     this.width = 4;
     this.height = 6;
     this.positionX = Math.floor(Math.random() * 100);
-    this.positionY = 85;
+    this.positionY = 60;
     this.domElement = null;
 
-    //this.domElement.className = "astronaut";
     this.speed = 1;
 
-    this.createAstroDomElement(this.positionX);
+    this.createAstronautDomElement(this.positionX);
   }
 
-  createAstroDomElement() {
+  createAstronautDomElement() {
     this.domElement = document.createElement("div");
     this.domElement.className = "astronaut";
     this.domElement.style.width = this.width + "vw";
@@ -422,10 +669,10 @@ class HudDisplay {
   createDomElement() {
     this.domElement = document.createElement("div");
     this.domElement.className = "";
-    this.domElement.style.width = this.width + "px";
-    this.domElement.style.height = this.height + "px";
-    this.domElement.style.left = this.positionX + "px";
-    this.domElement.style.top = this.positionY + "px";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.top = this.positionY + "vh";
 
     const parentElm = document.getElementById("hud-area");
     parentElm.appendChild(this.domElement);
@@ -443,7 +690,11 @@ class Points extends HudDisplay {
   }
 }
 
+
 const game = new Game();
 game.start();
-
 game.gasValue();
+
+
+
+

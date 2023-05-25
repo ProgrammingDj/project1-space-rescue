@@ -21,8 +21,8 @@ body {
     flex-direction: column;
     position: bottom;
     margin: auto;
-    height: 550px;
-    width: 1125px;
+    height: 72vh;
+    width: 78vw;
     background-color: black;
     border: 2px solid black;
     overflow: hidden;
@@ -36,15 +36,39 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
-    height: 50px;
-    width: 1125px;
-    border: 2px solid black;
+    justify-content:flex-end space-around baseline;
+    align-items: baseline;
+    height: 7vh;
+    width: 78vw;
+    border: 2px solid rgb(44, 1, 52);
     overflow: hidden;
-    background-color: black;
+    background-color: rgb(83, 0, 134);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+
+}
+
+#game-over {
+    position: relative;
+    margin: auto;
+    height: 600px;
+    width: 1125px;
+    background-color: black;
+    border: 2px solid black;
+    overflow: hidden;
+
+}
+
+#start {
+    position: relative;
+    margin: auto;
+    height: 600px;
+    width: 1125px;
+    background-color: black;
+    border: 2px solid black;
+    overflow: hidden;
+
 }
 
 .astronaut{
@@ -126,8 +150,8 @@ body {
         height: 40px;
         width: 80px;
         font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-        font-size: 30px;
-        color: #4d014f;
+        font-size: 22px;
+        color: #ffffff;
 }
 
 .astronautHud {
@@ -141,10 +165,10 @@ body {
 
 #astronautValue {
     height: 40px;
-    width: 100px;
+    width: 80px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: 30px;
-    color: #4d014f;
+    font-size: 22px;
+    color: #ffffff;
 }
 
 .gasHud {
@@ -158,10 +182,10 @@ body {
 
 #gasValue {
     height: 40px;
-    width: 100px;
+    width: 80px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 22px;
-    color: #4d014f;
+    color: #ffffff;
 }
 
 .background {
