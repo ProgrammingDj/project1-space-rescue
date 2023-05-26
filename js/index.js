@@ -3,3 +3,4 @@ addEventListener("keydown", (event) => {
         location.href = "./game.html"; 
     }
 });
+
