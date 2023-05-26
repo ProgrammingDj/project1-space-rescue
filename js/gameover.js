@@ -1,5 +1,5 @@
 addEventListener("keydown", (event) => {
     if (event.code === "Space") {
-        location.href = "./start.html"; 
+        location.href = "./index.html"; 
     }
 });

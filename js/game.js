@@ -475,9 +475,8 @@ class Ufo {
   }
 }
 
-class Nebula /* extends ObstacleDown */ {
-  constructor(/* width, height, className, speed */) {
-    /*    super(); */
+class Nebula {
+  constructor() {
     this.width = 4;
     this.height = 6;
     this.positionX = Math.floor(Math.random() * 100);
@@ -506,9 +505,8 @@ class Nebula /* extends ObstacleDown */ {
   }
 }
 
-class Meteor /* extends ObstacleDown */ {
-  constructor(/* width, height, className, speed */) {
-    /*    super(); */
+class Meteor {
+  constructor() {
     this.width = 4;
     this.height = 6;
     this.positionX = Math.floor(Math.random() * 100);
@@ -537,9 +535,8 @@ class Meteor /* extends ObstacleDown */ {
   }
 }
 
-class Satellite /* extends ObstacleDown */ {
-  constructor(/* width, height, className, speed */) {
-    /*    super(); */
+class Satellite {
+  constructor() {
     this.width = 4;
     this.height = 6;
     this.positionX = 70;
@@ -598,9 +595,8 @@ class Gas {
   }
 }
 
-class Astronaut /* extends ObstaclceDown */ {
+class Astronaut {
   constructor() {
-    /*    super(); */
     this.width = 4;
     this.height = 6;
     this.positionX = Math.floor(Math.random() * 100);
@@ -654,7 +650,7 @@ class HudDisplay {
 }
 
 class Points extends HudDisplay {
-  constructor(width, height, className) {
+  constructor() {
     super();
     this.width = 100;
     this.height = 40;
